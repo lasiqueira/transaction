@@ -1,7 +1,7 @@
 package com.lasiqueira.transaction.service;
 
-import com.lasiqueira.transaction.api.dto.v1.StatisticDTO;
-import com.lasiqueira.transaction.api.dto.v1.TransactionDTO;
+import com.lasiqueira.transaction.model.Statistic;
+import com.lasiqueira.transaction.model.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -18,15 +18,16 @@ import java.util.concurrent.ConcurrentHashMap;
 public class TransactionStatisticService {
     private Logger logger = LoggerFactory.getLogger(TransactionStatisticService.class);
 
-    private Set<TransactionDTO> transactions;
+    private Set<Transaction> transactions;
 
     public TransactionStatisticService() {
-        this.transactions = Collections.newSetFromMap(new ConcurrentHashMap<TransactionDTO, Boolean>());
+        this.transactions = Collections.newSetFromMap(new ConcurrentHashMap<Transaction, Boolean>());
     }
 
-    public boolean createTransaction(TransactionDTO transactionDTO) {
-        logger.debug("createTransaction: {}", transactionDTO);
-        transactions.add(transactionDTO);
+    public boolean createTransaction(Transaction transaction) {
+        transaction.setId(Long.valueOf(LocalDateTime.now(ZoneId.of("UTC")).hashCode()));
+        logger.debug("createTransaction: {}", transaction);
+        transactions.add(transaction);
         logger.debug("createTransaction success");
         return Boolean.TRUE;
     }
@@ -38,27 +39,27 @@ public class TransactionStatisticService {
         return Boolean.TRUE;
     }
 
-    public StatisticDTO getStatistics() {
+    public Statistic getStatistics() {
         logger.debug("getStatistics");
-        StatisticDTO statisticDTO = new StatisticDTO();
-        for (TransactionDTO transactionDTO : transactions) {
+        Statistic statistic = new Statistic();
+        for (Transaction transaction : transactions) {
             LocalDateTime now = LocalDateTime.now(ZoneId.of("UTC")).minusSeconds(60);
-            if (transactionDTO.getTimestamp().compareTo(now) >= 0) {
-                logger.debug("generating statistics from transaction: {}", transactionDTO);
-                statisticDTO.setSum(sum(statisticDTO.getSum(), transactionDTO.getAmount()));
-                statisticDTO.setMax(getMaximum(statisticDTO.getMax(), transactionDTO.getAmount()));
-                statisticDTO.setMin(getMinimum(statisticDTO.getMin(), transactionDTO.getAmount()));
+            if (transaction.getTimestamp().compareTo(now) >= 0) {
+                logger.debug("generating statistics from transaction: {}", transaction);
+                statistic.setSum(sum(statistic.getSum(), transaction.getAmount()));
+                statistic.setMax(getMaximum(statistic.getMax(), transaction.getAmount()));
+                statistic.setMin(getMinimum(statistic.getMin(), transaction.getAmount()));
             } else {
-                logger.debug("Removing old entry: {}", transactionDTO);
-                transactions.remove(transactionDTO);
+                logger.debug("Removing old entry: {}", transaction);
+                transactions.remove(transaction);
             }
         }
-        statisticDTO.setCount(transactions.size());
-        statisticDTO.setAvg(getAverage(statisticDTO.getSum(), statisticDTO.getCount()));
+        statistic.setCount(transactions.size());
+        statistic.setAvg(getAverage(statistic.getSum(), statistic.getCount()));
 
-        logger.debug("Statistics generated successfully: {}", statisticDTO);
+        logger.debug("Statistics generated successfully: {}", statistic);
 
-        return statisticDTO;
+        return statistic;
     }
 
     private BigDecimal getMaximum(BigDecimal oldVal, BigDecimal newVal) {

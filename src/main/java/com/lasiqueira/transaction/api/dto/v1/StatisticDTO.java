@@ -2,9 +2,10 @@ package com.lasiqueira.transaction.api.dto.v1;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.lasiqueira.transaction.api.serializer.v1.MoneySerializer;
+import lombok.Data;
 
 import java.math.BigDecimal;
-
+@Data
 public class StatisticDTO {
     @JsonSerialize(using = MoneySerializer.class)
     private BigDecimal sum;
@@ -31,54 +32,4 @@ public class StatisticDTO {
         this.count = count;
     }
 
-    public BigDecimal getSum() {
-        return sum;
-    }
-
-    public void setSum(BigDecimal sum) {
-        this.sum = sum;
-    }
-
-    public BigDecimal getAvg() {
-        return avg;
-    }
-
-    public void setAvg(BigDecimal avg) {
-        this.avg = avg;
-    }
-
-    public BigDecimal getMax() {
-        return max;
-    }
-
-    public void setMax(BigDecimal max) {
-        this.max = max;
-    }
-
-    public BigDecimal getMin() {
-        return min;
-    }
-
-    public void setMin(BigDecimal min) {
-        this.min = min;
-    }
-
-    public long getCount() {
-        return count;
-    }
-
-    public void setCount(long count) {
-        this.count = count;
-    }
-
-    @Override
-    public String toString() {
-        return "StatisticDTO{" +
-                "sum=" + sum +
-                ", avg=" + avg +
-                ", max=" + max +
-                ", min=" + min +
-                ", count=" + count +
-                '}';
-    }
 }

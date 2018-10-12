@@ -1,7 +1,7 @@
 package com.lasiqueira.transaction.service;
 
-import com.lasiqueira.transaction.api.dto.v1.StatisticDTO;
-import com.lasiqueira.transaction.api.dto.v1.TransactionDTO;
+import com.lasiqueira.transaction.model.Statistic;
+import com.lasiqueira.transaction.model.Transaction;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -9,10 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
+import static io.github.benas.randombeans.api.EnhancedRandom.random;
 import static junit.framework.TestCase.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -22,18 +22,17 @@ import static org.junit.Assert.assertTrue;
 public class TransactionStatisticServiceTest {
     @Autowired
     private TransactionStatisticService transactionStatisticService;
-    private TransactionDTO transactionDTO;
+    private Transaction transaction;
 
     @Before
     public void setup() {
-        transactionDTO = new TransactionDTO();
-        transactionDTO.setAmount(new BigDecimal("10.00"));
-        transactionDTO.setTimestamp(LocalDateTime.now(ZoneId.of("UTC")));
+        transaction = random(Transaction.class);
+        transaction.setTimestamp(LocalDateTime.now(ZoneId.of("UTC")));
     }
 
     @Test
     public void createTransactionTest() {
-        boolean expected = transactionStatisticService.createTransaction(transactionDTO);
+        boolean expected = transactionStatisticService.createTransaction(transaction);
         assertTrue(expected);
     }
 
@@ -45,14 +44,14 @@ public class TransactionStatisticServiceTest {
 
     @Test
     public void getStatisticsTest() {
-        transactionStatisticService.createTransaction(transactionDTO);
-        StatisticDTO expected = transactionStatisticService.getStatistics();
+        transactionStatisticService.createTransaction(transaction);
+        Statistic expected = transactionStatisticService.getStatistics();
         assertNotNull(expected);
         assertTrue(expected.getCount() > 0);
-        assertEquals(expected.getSum(), transactionDTO.getAmount());
-        assertEquals(expected.getMax(), transactionDTO.getAmount());
-        assertEquals(expected.getMin(), transactionDTO.getAmount());
-        assertEquals(expected.getAvg(), transactionDTO.getAmount());
+        assertEquals(expected.getSum(), transaction.getAmount());
+        assertEquals(expected.getMax(), transaction.getAmount());
+        assertEquals(expected.getMin(), transaction.getAmount());
+        assertEquals(expected.getAvg(), transaction.getAmount());
 
     }
 
