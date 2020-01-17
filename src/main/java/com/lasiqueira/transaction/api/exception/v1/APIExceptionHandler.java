@@ -16,7 +16,7 @@ public class APIExceptionHandler {
     @ExceptionHandler({InvalidDateException.class, JsonParseException.class, DateTimeParseException.class, InvalidFormatException.class})
     public final ResponseEntity<ApiError> handleException(Exception ex, WebRequest request) {
 
-        if (ex.getCause() instanceof InvalidDateException || ex.getCause() instanceof DateTimeParseException || ex.getCause() instanceof InvalidFormatException) {
+        if (ex instanceof InvalidDateException || ex instanceof DateTimeParseException || ex instanceof InvalidFormatException) {
             HttpStatus status = HttpStatus.UNPROCESSABLE_ENTITY;
 
             return new ResponseEntity<>(new ApiError(ex.getMessage()), status);

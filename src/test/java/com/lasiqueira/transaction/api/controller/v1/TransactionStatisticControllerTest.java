@@ -9,15 +9,18 @@ import com.lasiqueira.transaction.api.validator.v1.DateValidator;
 import com.lasiqueira.transaction.model.Statistic;
 import com.lasiqueira.transaction.model.Transaction;
 import com.lasiqueira.transaction.service.TransactionStatisticService;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+
+import org.junit.jupiter.api.BeforeAll;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
@@ -29,8 +32,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @WebMvcTest(TransactionStatisticController.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class TransactionStatisticControllerTest {
     @Autowired
     private MockMvc mockMvc;
@@ -48,7 +52,7 @@ public class TransactionStatisticControllerTest {
     private StatisticDTO statisticDTO;
 
 
-    @Before
+    @BeforeAll
     public void setup() {
         transactionDTO = random(TransactionDTO.class);
 
@@ -130,7 +134,7 @@ public class TransactionStatisticControllerTest {
         try {
             mockMvc.perform(get("/v1/statistics"))
                     .andExpect(status().isOk())
-                    .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
+                    .andExpect(content().contentType(APPLICATION_JSON));
         } catch (Exception e) {
             e.printStackTrace();
         }
