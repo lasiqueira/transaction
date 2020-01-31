@@ -42,7 +42,8 @@ public class TransactionStatisticService {
     public Statistic getStatistics() {
         logger.debug("getStatistics");
         var statistic = new Statistic();
-        for (var transaction : transactions) {
+
+        transactions.forEach(transaction -> {
             var now = LocalDateTime.now(ZoneId.of("UTC")).minusSeconds(60);
             if (transaction.getTimestamp().compareTo(now) >= 0) {
                 logger.debug("generating statistics from transaction: {}", transaction);
@@ -53,7 +54,7 @@ public class TransactionStatisticService {
                 logger.debug("Removing old entry: {}", transaction);
                 transactions.remove(transaction);
             }
-        }
+        });
         statistic.setCount(transactions.size());
         statistic.setAvg(getAverage(statistic.getSum(), statistic.getCount()));
 
