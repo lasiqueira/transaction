@@ -9,9 +9,7 @@ import com.lasiqueira.transaction.api.validator.v1.DateValidator;
 import com.lasiqueira.transaction.model.Statistic;
 import com.lasiqueira.transaction.model.Transaction;
 import com.lasiqueira.transaction.service.TransactionStatisticService;
-
 import org.junit.jupiter.api.BeforeAll;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,7 +17,6 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -50,7 +47,6 @@ public class TransactionStatisticControllerTest {
     private Statistic statistic;
     private Transaction transaction;
     private StatisticDTO statisticDTO;
-
 
     @BeforeAll
     public void setup() {

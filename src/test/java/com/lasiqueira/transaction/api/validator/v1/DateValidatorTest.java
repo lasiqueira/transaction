@@ -33,13 +33,13 @@ public class DateValidatorTest {
 
     @Test
     public void validateCurrentDateTest() throws InvalidDateException {
-        boolean expected = dateValidator.validateDate(currentDateTime);
+        var expected = dateValidator.validateDate(currentDateTime);
         Assertions.assertTrue(expected);
     }
 
     @Test
     public void validateOldDateTest() throws InvalidDateException {
-        boolean expected = dateValidator.validateDate(oldDateTime);
+        var expected = dateValidator.validateDate(oldDateTime);
         Assertions.assertFalse(expected);
 
     }

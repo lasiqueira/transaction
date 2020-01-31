@@ -11,13 +11,13 @@ public class TransactionStatisticConverter {
 
 
     public Transaction convertTransactionDTOToTransaction(TransactionDTO transactionDTO){
-        Transaction transaction = new Transaction();
+        var transaction = new Transaction();
         transaction.setAmount(transactionDTO.getAmount());
         transaction.setTimestamp(transactionDTO.getTimestamp());
         return transaction;
     }
     public StatisticDTO convertStatisticToStatisticDTO(Statistic statistic){
-        StatisticDTO statisticDTO = new StatisticDTO();
+        var statisticDTO = new StatisticDTO();
         statisticDTO.setAvg(statistic.getAvg());
         statisticDTO.setCount(statistic.getCount());
         statisticDTO.setMax(statistic.getMax());

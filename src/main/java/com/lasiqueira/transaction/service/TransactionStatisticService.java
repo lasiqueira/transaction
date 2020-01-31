@@ -21,11 +21,11 @@ public class TransactionStatisticService {
     private Set<Transaction> transactions;
 
     public TransactionStatisticService() {
-        this.transactions = Collections.newSetFromMap(new ConcurrentHashMap<Transaction, Boolean>());
+        this.transactions = Collections.newSetFromMap(new ConcurrentHashMap<>());
     }
 
     public boolean createTransaction(Transaction transaction) {
-        transaction.setId(Long.valueOf(LocalDateTime.now(ZoneId.of("UTC")).hashCode()));
+        transaction.setId((long) LocalDateTime.now(ZoneId.of("UTC")).hashCode());
         logger.debug("createTransaction: {}", transaction);
         transactions.add(transaction);
         logger.debug("createTransaction success");
@@ -41,9 +41,9 @@ public class TransactionStatisticService {
 
     public Statistic getStatistics() {
         logger.debug("getStatistics");
-        Statistic statistic = new Statistic();
-        for (Transaction transaction : transactions) {
-            LocalDateTime now = LocalDateTime.now(ZoneId.of("UTC")).minusSeconds(60);
+        var statistic = new Statistic();
+        for (var transaction : transactions) {
+            var now = LocalDateTime.now(ZoneId.of("UTC")).minusSeconds(60);
             if (transaction.getTimestamp().compareTo(now) >= 0) {
                 logger.debug("generating statistics from transaction: {}", transaction);
                 statistic.setSum(sum(statistic.getSum(), transaction.getAmount()));

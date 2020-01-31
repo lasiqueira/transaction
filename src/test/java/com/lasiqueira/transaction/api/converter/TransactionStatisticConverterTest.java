@@ -37,7 +37,7 @@ public class TransactionStatisticConverterTest {
 
     @Test
     public void convertTransactionDTOToTransactionTest(){
-        Transaction expected = transactionStatisticConverter.convertTransactionDTOToTransaction(transactionDTO);
+        var expected = transactionStatisticConverter.convertTransactionDTOToTransaction(transactionDTO);
 
         Assertions.assertNotNull(expected);
         Assertions.assertEquals(expected.getAmount(), transactionDTO.getAmount());
@@ -46,7 +46,7 @@ public class TransactionStatisticConverterTest {
 
     @Test
     public void convertStatisticToStatisticDTOTest(){
-        StatisticDTO expected = transactionStatisticConverter.convertStatisticToStatisticDTO(statistic);
+        var expected = transactionStatisticConverter.convertStatisticToStatisticDTO(statistic);
 
         Assertions.assertNotNull(expected);
         Assertions.assertEquals(expected.getAvg(), statistic.getAvg());

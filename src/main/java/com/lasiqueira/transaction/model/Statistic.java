@@ -62,7 +62,7 @@ public class Statistic {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Statistic statistic = (Statistic) o;
+        var statistic = (Statistic) o;
         return count == statistic.count &&
                 Objects.equals(sum, statistic.sum) &&
                 Objects.equals(avg, statistic.avg) &&

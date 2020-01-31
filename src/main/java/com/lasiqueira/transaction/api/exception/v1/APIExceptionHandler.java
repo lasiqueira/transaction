@@ -17,14 +17,14 @@ public class APIExceptionHandler {
     public final ResponseEntity<ApiError> handleException(Exception ex, WebRequest request) {
 
         if (ex instanceof InvalidDateException || ex instanceof DateTimeParseException || ex instanceof InvalidFormatException) {
-            HttpStatus status = HttpStatus.UNPROCESSABLE_ENTITY;
+            var status = HttpStatus.UNPROCESSABLE_ENTITY;
 
             return new ResponseEntity<>(new ApiError(ex.getMessage()), status);
         } else if (ex.getCause() instanceof JsonParseException) {
-            HttpStatus status = HttpStatus.BAD_REQUEST;
+            var status = HttpStatus.BAD_REQUEST;
             return new ResponseEntity<>(new ApiError(ex.getMessage()), status);
         } else {
-            HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+            var status = HttpStatus.INTERNAL_SERVER_ERROR;
             return new ResponseEntity<>(new ApiError(ex.getMessage()), status);
         }
     }

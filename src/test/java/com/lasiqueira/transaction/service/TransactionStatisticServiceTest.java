@@ -1,6 +1,5 @@
 package com.lasiqueira.transaction.service;
 
-import com.lasiqueira.transaction.model.Statistic;
 import com.lasiqueira.transaction.model.Transaction;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -32,20 +31,20 @@ public class TransactionStatisticServiceTest {
 
     @Test
     public void createTransactionTest() {
-        boolean expected = transactionStatisticService.createTransaction(transaction);
+        var expected = transactionStatisticService.createTransaction(transaction);
         Assertions.assertTrue(expected);
     }
 
     @Test
     public void deleteTransactionsTest() {
-        boolean expected = transactionStatisticService.deleteTransactions();
+        var expected = transactionStatisticService.deleteTransactions();
         Assertions.assertTrue(expected);
     }
 
     @Test
     public void getStatisticsTest() {
         transactionStatisticService.createTransaction(transaction);
-        Statistic expected = transactionStatisticService.getStatistics();
+        var expected = transactionStatisticService.getStatistics();
         Assertions.assertNotNull(expected);
         Assertions.assertTrue(expected.getCount() > 0);
         Assertions.assertEquals(expected.getSum(), transaction.getAmount());

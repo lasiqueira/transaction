@@ -76,7 +76,7 @@ public class StatisticDTO {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        StatisticDTO that = (StatisticDTO) o;
+        var that = (StatisticDTO) o;
         return count == that.count &&
                 Objects.equals(sum, that.sum) &&
                 Objects.equals(avg, that.avg) &&

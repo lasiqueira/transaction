@@ -14,7 +14,7 @@ public class DateValidator {
 
     public boolean validateDate(LocalDateTime localDateTime) throws InvalidDateException {
         logger.debug("validateDate: {}", localDateTime);
-        LocalDateTime now = LocalDateTime.now(ZoneId.of("UTC"));
+        var now = LocalDateTime.now(ZoneId.of("UTC"));
         if (localDateTime.compareTo(now) > 0) {
             logger.debug("DateTime is in the future.");
             throw new InvalidDateException("Invalid Date");

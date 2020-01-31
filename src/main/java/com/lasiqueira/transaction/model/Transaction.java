@@ -37,7 +37,7 @@ public class Transaction {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Transaction that = (Transaction) o;
+        var that = (Transaction) o;
         return Objects.equals(id, that.id) &&
                 Objects.equals(amount, that.amount) &&
                 Objects.equals(timestamp, that.timestamp);
