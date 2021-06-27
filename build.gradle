@@ -1,12 +1,12 @@
 plugins {
-	id 'org.springframework.boot' version '2.2.5.RELEASE'
-	id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+	id 'org.springframework.boot' version '2.5.0'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
 }
 
 group = 'com.lasiqueira'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '13'
+sourceCompatibility = '16'
 
 repositories {
 	mavenCentral()

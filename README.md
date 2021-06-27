@@ -1,5 +1,5 @@
 # transaction
-Java 13 and Spring boot 2 Transaction REST API
+Java 16 and Spring boot 2 Transaction REST API
 
 ## Building
 `gradle clean build`
