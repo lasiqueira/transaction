@@ -6,6 +6,7 @@ import com.lasiqueira.transaction.api.dto.v1.TransactionDTO;
 import com.lasiqueira.transaction.model.Statistic;
 import com.lasiqueira.transaction.model.Transaction;
 
+import io.github.benas.randombeans.EnhancedRandomBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -14,6 +15,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 import static io.github.benas.randombeans.api.EnhancedRandom.random;
 
@@ -31,8 +35,8 @@ public class TransactionStatisticConverterTest {
 
     @BeforeAll
     public void setup(){
-        statistic = random(Statistic.class);
-        transactionDTO = random(TransactionDTO.class);
+        statistic = EnhancedRandomBuilder.aNewEnhancedRandom().nextObject(Statistic.class);
+        transactionDTO = new TransactionDTO(BigDecimal.TEN, LocalDateTime.now());
     }
 
     @Test
@@ -40,8 +44,8 @@ public class TransactionStatisticConverterTest {
         var expected = transactionStatisticConverter.convertTransactionDTOToTransaction(transactionDTO);
 
         Assertions.assertNotNull(expected);
-        Assertions.assertEquals(expected.getAmount(), transactionDTO.getAmount());
-        Assertions.assertEquals(expected.getTimestamp(), transactionDTO.getTimestamp());
+        Assertions.assertEquals(expected.getAmount(), transactionDTO.amount());
+        Assertions.assertEquals(expected.getTimestamp(), transactionDTO.timestamp());
     }
 
     @Test
@@ -49,11 +53,11 @@ public class TransactionStatisticConverterTest {
         var expected = transactionStatisticConverter.convertStatisticToStatisticDTO(statistic);
 
         Assertions.assertNotNull(expected);
-        Assertions.assertEquals(expected.getAvg(), statistic.getAvg());
-        Assertions.assertEquals(expected.getMax(), statistic.getMax());
-        Assertions.assertEquals(expected.getMin(), statistic.getMin());
-        Assertions.assertEquals(expected.getSum(), statistic.getSum());
-        Assertions.assertEquals(expected.getCount(), statistic.getCount());
+        Assertions.assertEquals(expected.avg(), statistic.getAvg());
+        Assertions.assertEquals(expected.max(), statistic.getMax());
+        Assertions.assertEquals(expected.min(), statistic.getMin());
+        Assertions.assertEquals(expected.sum(), statistic.getSum());
+        Assertions.assertEquals(expected.count(), statistic.getCount());
 
     }
 }

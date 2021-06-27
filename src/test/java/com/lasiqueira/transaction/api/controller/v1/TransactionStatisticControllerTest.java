@@ -9,6 +9,8 @@ import com.lasiqueira.transaction.api.validator.v1.DateValidator;
 import com.lasiqueira.transaction.model.Statistic;
 import com.lasiqueira.transaction.model.Transaction;
 import com.lasiqueira.transaction.service.TransactionStatisticService;
+import io.github.benas.randombeans.EnhancedRandomBuilder;
+import org.apache.tomcat.jni.Local;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -20,6 +22,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import static io.github.benas.randombeans.api.EnhancedRandom.random;
@@ -50,13 +53,13 @@ public class TransactionStatisticControllerTest {
 
     @BeforeAll
     public void setup() {
-        transactionDTO = random(TransactionDTO.class);
+        transactionDTO = new TransactionDTO(BigDecimal.TEN, LocalDateTime.now());
 
-        transaction = random(Transaction.class);
+        transaction = EnhancedRandomBuilder.aNewEnhancedRandom().nextObject(Transaction.class);
 
 
         statistic = new Statistic();
-        statisticDTO = new StatisticDTO();
+        statisticDTO = new StatisticDTO(BigDecimal.TEN, BigDecimal.TEN, BigDecimal.TEN, BigDecimal.TEN, 1L);
     }
 
     @Test

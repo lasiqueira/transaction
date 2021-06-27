@@ -1,6 +1,7 @@
 package com.lasiqueira.transaction.service;
 
 import com.lasiqueira.transaction.model.Transaction;
+import io.github.benas.randombeans.EnhancedRandomBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -13,8 +14,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
-import static io.github.benas.randombeans.api.EnhancedRandom.random;
-
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -25,7 +24,7 @@ public class TransactionStatisticServiceTest {
 
     @BeforeAll
     public void setup() {
-        transaction = random(Transaction.class);
+        transaction = EnhancedRandomBuilder.aNewEnhancedRandom().nextObject(Transaction.class);
         transaction.setTimestamp(LocalDateTime.now(ZoneId.of("UTC")));
     }
 

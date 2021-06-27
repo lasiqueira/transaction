@@ -33,7 +33,7 @@ public class TransactionStatisticController {
     @PostMapping(value = "/transactions", produces = "application/json")
     public ResponseEntity<Void> createTransaction(@RequestBody @Valid TransactionDTO request) throws InvalidDateException {
         logger.debug("createTransaction: {}", request);
-        var valid = dateValidator.validateDate(request.getTimestamp());
+        var valid = dateValidator.validateDate(request.timestamp());
         var status = HttpStatus.CREATED;
         if(valid){
             transactionStatisticService.createTransaction(transactionStatisticConverter.convertTransactionDTOToTransaction(request));

@@ -13,8 +13,8 @@ public class TransactionStatisticConverter {
     public Transaction convertTransactionDTOToTransaction(TransactionDTO transactionDTO){
         return new Transaction(
                 null,
-                transactionDTO.getAmount(),
-                transactionDTO.getTimestamp()
+                transactionDTO.amount(),
+                transactionDTO.timestamp()
         );
     }
     public StatisticDTO convertStatisticToStatisticDTO(Statistic statistic){
