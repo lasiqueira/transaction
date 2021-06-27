@@ -9,6 +9,12 @@ public class Transaction {
     private BigDecimal amount;
     private LocalDateTime timestamp;
 
+    public Transaction(Long id, BigDecimal amount, LocalDateTime timestamp) {
+        this.id = id;
+        this.amount = amount;
+        this.timestamp = timestamp;
+    }
+
     public Long getId() {
         return id;
     }

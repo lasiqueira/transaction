@@ -10,7 +10,7 @@ import java.time.ZoneId;
 
 @Component
 public class DateValidator {
-    private Logger logger = LoggerFactory.getLogger(DateValidator.class);
+    private final Logger logger = LoggerFactory.getLogger(DateValidator.class);
 
     public boolean validateDate(LocalDateTime localDateTime) throws InvalidDateException {
         logger.debug("validateDate: {}", localDateTime);

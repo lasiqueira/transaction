@@ -11,18 +11,19 @@ public class TransactionStatisticConverter {
 
 
     public Transaction convertTransactionDTOToTransaction(TransactionDTO transactionDTO){
-        var transaction = new Transaction();
-        transaction.setAmount(transactionDTO.getAmount());
-        transaction.setTimestamp(transactionDTO.getTimestamp());
-        return transaction;
+        return new Transaction(
+                null,
+                transactionDTO.getAmount(),
+                transactionDTO.getTimestamp()
+        );
     }
     public StatisticDTO convertStatisticToStatisticDTO(Statistic statistic){
-        var statisticDTO = new StatisticDTO();
-        statisticDTO.setAvg(statistic.getAvg());
-        statisticDTO.setCount(statistic.getCount());
-        statisticDTO.setMax(statistic.getMax());
-        statisticDTO.setMin(statistic.getMin());
-        statisticDTO.setSum(statistic.getSum());
-        return statisticDTO;
+        return new StatisticDTO(
+                statistic.getSum(),
+                statistic.getAvg(),
+                statistic.getMax(),
+                statistic.getMin(),
+                statistic.getCount()
+        );
     }
 }

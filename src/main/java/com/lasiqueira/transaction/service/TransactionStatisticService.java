@@ -16,9 +16,9 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 public class TransactionStatisticService {
-    private Logger logger = LoggerFactory.getLogger(TransactionStatisticService.class);
+    private final Logger logger = LoggerFactory.getLogger(TransactionStatisticService.class);
 
-    private Set<Transaction> transactions;
+    private final Set<Transaction> transactions;
 
     public TransactionStatisticService() {
         this.transactions = Collections.newSetFromMap(new ConcurrentHashMap<>());

@@ -17,10 +17,10 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/v1")
 public class TransactionStatisticController {
-    private Logger logger = LoggerFactory.getLogger(TransactionStatisticController.class);
-    private TransactionStatisticService transactionStatisticService;
-    private DateValidator dateValidator;
-    private TransactionStatisticConverter transactionStatisticConverter;
+    private final Logger logger = LoggerFactory.getLogger(TransactionStatisticController.class);
+    private final TransactionStatisticService transactionStatisticService;
+    private final DateValidator dateValidator;
+    private final TransactionStatisticConverter transactionStatisticConverter;
 
     public TransactionStatisticController(TransactionStatisticService transactionStatisticService,
                                           DateValidator dateValidator,
