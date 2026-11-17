@@ -13,19 +13,23 @@ import java.time.ZoneId;
 import java.util.Collections;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicLong;
 
 @Service
 public class TransactionStatisticService {
     private final Logger logger = LoggerFactory.getLogger(TransactionStatisticService.class);
 
     private final Set<Transaction> transactions;
+    private final AtomicLong nextId = new AtomicLong();
 
     public TransactionStatisticService() {
         this.transactions = Collections.newSetFromMap(new ConcurrentHashMap<>());
     }
 
     public boolean createTransaction(Transaction transaction) {
-        transaction.setId((long) LocalDateTime.now(ZoneId.of("UTC")).hashCode());
+        // A unique id per transaction: deriving it from the clock let two identical transactions posted in
+        // the same tick get the same id, so the set treated them as one and the second was lost.
+        transaction.setId(nextId.incrementAndGet());
         logger.debug("createTransaction: {}", transaction);
         transactions.add(transaction);
         logger.debug("createTransaction success");
@@ -48,14 +52,21 @@ public class TransactionStatisticService {
             if (transaction.getTimestamp().compareTo(now) >= 0) {
                 logger.debug("generating statistics from transaction: {}", transaction);
                 statistic.setSum(sum(statistic.getSum(), transaction.getAmount()));
-                statistic.setMax(getMaximum(statistic.getMax(), transaction.getAmount()));
-                statistic.setMin(getMinimum(statistic.getMin(), transaction.getAmount()));
+                if (statistic.getCount() == 0) {
+                    // the first transaction seeds max/min, so zero and negative amounts are handled correctly
+                    statistic.setMax(transaction.getAmount());
+                    statistic.setMin(transaction.getAmount());
+                } else {
+                    statistic.setMax(getMaximum(statistic.getMax(), transaction.getAmount()));
+                    statistic.setMin(getMinimum(statistic.getMin(), transaction.getAmount()));
+                }
+                // count only what was aggregated (transactions.size() may include concurrently added entries)
+                statistic.setCount(statistic.getCount() + 1);
             } else {
                 logger.debug("Removing old entry: {}", transaction);
                 transactions.remove(transaction);
             }
         });
-        statistic.setCount(transactions.size());
         statistic.setAvg(getAverage(statistic.getSum(), statistic.getCount()));
 
         logger.debug("Statistics generated successfully: {}", statistic);
@@ -71,7 +82,7 @@ public class TransactionStatisticService {
     }
 
     private BigDecimal getMinimum(BigDecimal oldVal, BigDecimal newVal) {
-        if (oldVal.compareTo(BigDecimal.ZERO) == 0 || oldVal.compareTo(newVal) > 0) {
+        if (oldVal.compareTo(newVal) > 0) {
             return newVal;
         }
         return oldVal;

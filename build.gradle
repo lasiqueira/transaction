@@ -1,12 +1,17 @@
 plugins {
-	id 'org.springframework.boot' version '2.5.0'
-	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id 'org.springframework.boot' version '4.1.2'
+	id 'io.spring.dependency-management' version '1.1.7'
 	id 'java'
 }
 
 group = 'com.lasiqueira'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '16'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(25)
+	}
+}
 
 repositories {
 	mavenCentral()
@@ -15,6 +20,6 @@ repositories {
 
 apply from: 'dependencies.gradle'
 
-test {
+tasks.named('test') {
 	useJUnitPlatform()
 }

@@ -1,6 +1,6 @@
 package com.lasiqueira.transaction.api.dto.v1;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import tools.jackson.databind.annotation.JsonSerialize;
 import com.lasiqueira.transaction.api.serializer.v1.MoneySerializer;
 
 import java.math.BigDecimal;

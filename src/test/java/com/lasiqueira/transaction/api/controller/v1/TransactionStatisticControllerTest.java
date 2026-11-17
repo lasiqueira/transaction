@@ -1,6 +1,7 @@
 package com.lasiqueira.transaction.api.controller.v1;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
+import com.lasiqueira.transaction.TestData;
 import com.lasiqueira.transaction.api.converter.v1.TransactionStatisticConverter;
 import com.lasiqueira.transaction.api.dto.v1.StatisticDTO;
 import com.lasiqueira.transaction.api.dto.v1.TransactionDTO;
@@ -9,23 +10,20 @@ import com.lasiqueira.transaction.api.validator.v1.DateValidator;
 import com.lasiqueira.transaction.model.Statistic;
 import com.lasiqueira.transaction.model.Transaction;
 import com.lasiqueira.transaction.service.TransactionStatisticService;
-import io.github.benas.randombeans.EnhancedRandomBuilder;
-import org.apache.tomcat.jni.Local;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-import static io.github.benas.randombeans.api.EnhancedRandom.random;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -40,11 +38,11 @@ public class TransactionStatisticControllerTest {
     private MockMvc mockMvc;
     @Autowired
     private ObjectMapper objectMapper;
-    @MockBean
+    @MockitoBean
     private TransactionStatisticService transactionStatisticService;
-    @MockBean
+    @MockitoBean
     private TransactionStatisticConverter transactionStatisticConverter;
-    @MockBean
+    @MockitoBean
     private DateValidator dateValidator;
     private TransactionDTO transactionDTO;
     private Statistic statistic;
@@ -55,7 +53,7 @@ public class TransactionStatisticControllerTest {
     public void setup() {
         transactionDTO = new TransactionDTO(BigDecimal.TEN, LocalDateTime.now());
 
-        transaction = EnhancedRandomBuilder.aNewEnhancedRandom().nextObject(Transaction.class);
+        transaction = TestData.transaction();
 
 
         statistic = new Statistic();
@@ -63,79 +61,79 @@ public class TransactionStatisticControllerTest {
     }
 
     @Test
-    public void createTransactionSuccessTest() throws InvalidDateException {
+    public void createTransactionSuccessTest() throws Exception {
         when(dateValidator.validateDate(Mockito.any(LocalDateTime.class))).thenReturn(Boolean.TRUE);
         when(transactionStatisticConverter.convertTransactionDTOToTransaction(transactionDTO)).thenReturn(transaction);
-        try {
-            mockMvc.perform(post("/v1/transactions")
-                    .content(objectMapper.writeValueAsString(transactionDTO))
-                    .contentType(APPLICATION_JSON))
-                    .andExpect(status().isCreated());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        mockMvc.perform(post("/v1/transactions")
+                .content(objectMapper.writeValueAsString(transactionDTO))
+                .contentType(APPLICATION_JSON))
+                .andExpect(status().isCreated());
     }
 
     @Test
-    public void createTransactionOldTest() throws InvalidDateException {
+    public void createTransactionOldTest() throws Exception {
         when(dateValidator.validateDate(Mockito.any(LocalDateTime.class))).thenReturn(Boolean.FALSE);
         when(transactionStatisticConverter.convertTransactionDTOToTransaction(transactionDTO)).thenReturn(transaction);
-        try {
-            mockMvc.perform(post("/v1/transactions")
-                    .content(objectMapper.writeValueAsString(transactionDTO))
-                    .contentType(APPLICATION_JSON))
-                    .andExpect(status().isNoContent());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        mockMvc.perform(post("/v1/transactions")
+                .content(objectMapper.writeValueAsString(transactionDTO))
+                .contentType(APPLICATION_JSON))
+                .andExpect(status().isNoContent());
     }
 
     @Test
-    public void createTransactionInvalidTest() {
-        try {
-            mockMvc.perform(post("/v1/transactions")
-                    .content("{hello}")
-                    .contentType(APPLICATION_JSON))
-                    .andExpect(status().isBadRequest());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public void createTransactionInvalidTest() throws Exception {
+        mockMvc.perform(post("/v1/transactions")
+                .content("{hello}")
+                .contentType(APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
     }
 
     @Test
-    public void createTransactionFutureTest() throws InvalidDateException {
+    public void createTransactionFutureTest() throws Exception {
         when(dateValidator.validateDate(Mockito.any(LocalDateTime.class))).thenThrow(InvalidDateException.class);
         when(transactionStatisticConverter.convertTransactionDTOToTransaction(transactionDTO)).thenReturn(transaction);
-        try {
-            mockMvc.perform(post("/v1/transactions")
-                    .content(objectMapper.writeValueAsString(transactionDTO))
-                    .contentType(APPLICATION_JSON))
-                    .andExpect(status().isUnprocessableEntity());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        mockMvc.perform(post("/v1/transactions")
+                .content(objectMapper.writeValueAsString(transactionDTO))
+                .contentType(APPLICATION_JSON))
+                .andExpect(status().isUnprocessableContent());
     }
 
     @Test
-    public void deleteTransactionsTest() {
-        try {
-            mockMvc.perform(delete("/v1/transactions"))
-                    .andExpect(status().isNoContent());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public void createTransactionUnparseableAmountTest() throws Exception {
+        mockMvc.perform(post("/v1/transactions")
+                .content("{\"amount\":\"abc\",\"timestamp\":\"2021-06-01T10:00:00\"}")
+                .contentType(APPLICATION_JSON))
+                .andExpect(status().isUnprocessableContent());
     }
 
     @Test
-    public void getStatisticsTest() {
+    public void createTransactionUnparseableTimestampTest() throws Exception {
+        mockMvc.perform(post("/v1/transactions")
+                .content("{\"amount\":\"10\",\"timestamp\":\"not-a-date\"}")
+                .contentType(APPLICATION_JSON))
+                .andExpect(status().isUnprocessableContent());
+    }
+
+    @Test
+    public void createTransactionMissingFieldsTest() throws Exception {
+        mockMvc.perform(post("/v1/transactions")
+                .content("{\"amount\":\"10\"}")
+                .contentType(APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void deleteTransactionsTest() throws Exception {
+        mockMvc.perform(delete("/v1/transactions"))
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    public void getStatisticsTest() throws Exception {
         when(transactionStatisticService.getStatistics()).thenReturn(statistic);
         when(transactionStatisticConverter.convertStatisticToStatisticDTO(statistic)).thenReturn(statisticDTO);
-        try {
-            mockMvc.perform(get("/v1/statistics"))
-                    .andExpect(status().isOk())
-                    .andExpect(content().contentType(APPLICATION_JSON));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        mockMvc.perform(get("/v1/statistics"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(APPLICATION_JSON));
     }
 }
