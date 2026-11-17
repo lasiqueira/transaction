@@ -1,11 +1,11 @@
 # transaction
-Java 16 and Spring boot 2 Transaction REST API
+Java 25 and Spring Boot 4 Transaction REST API
 
 ## Building
-`gradle clean build`
+`./gradlew clean build` (Gradle 9 wrapper; requires a JDK 25 toolchain)
 
 ## Running
-`gradle bootRun`
+`./gradlew bootRun`
 
 ## Documentation
 (default: http://localhost:8080)  

@@ -1,12 +1,12 @@
 package com.lasiqueira.transaction.api.converter;
 
+import com.lasiqueira.transaction.TestData;
 import com.lasiqueira.transaction.api.converter.v1.TransactionStatisticConverter;
 import com.lasiqueira.transaction.api.dto.v1.StatisticDTO;
 import com.lasiqueira.transaction.api.dto.v1.TransactionDTO;
 import com.lasiqueira.transaction.model.Statistic;
 import com.lasiqueira.transaction.model.Transaction;
 
-import io.github.benas.randombeans.EnhancedRandomBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -19,7 +19,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-import static io.github.benas.randombeans.api.EnhancedRandom.random;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -35,7 +34,7 @@ public class TransactionStatisticConverterTest {
 
     @BeforeAll
     public void setup(){
-        statistic = EnhancedRandomBuilder.aNewEnhancedRandom().nextObject(Statistic.class);
+        statistic = TestData.statistic();
         transactionDTO = new TransactionDTO(BigDecimal.TEN, LocalDateTime.now());
     }
 

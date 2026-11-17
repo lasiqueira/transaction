@@ -1,9 +1,10 @@
 dependencies {
-    implementation('org.springframework.boot:spring-boot-starter-actuator')
-    implementation('org.springframework.boot:spring-boot-starter-web')
-    implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.5.9'
-    runtimeOnly('org.springframework.boot:spring-boot-devtools')
-    testImplementation('org.springframework.restdocs:spring-restdocs-mockmvc')
-    testImplementation('org.springframework.boot:spring-boot-starter-test')
-    testImplementation group: 'io.github.benas', name: 'random-beans', version: '3.9.0'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-webmvc'
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:3.2.0'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
